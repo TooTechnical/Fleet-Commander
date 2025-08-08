@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleships – Setup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Battleships</h1>
+    </header>
+    <main>
+        <p>Configure your game settings below and click <em>Start Game</em> to begin.</p>
+        {% if error %}<p class="error">{{ error }}</p>{% endif %}
+        <form method="post">
+            <label for="size">Board size (4–10):</label>
+            <input type="number" id="size" name="size" min="4" max="10" required>
+            <label for="ships">Number of ships:</label>
+            <input type="number" id="ships" name="ships" min="1" required>
+            {# Hidden input ensures only sea battles are available. #}
+            <input type="hidden" name="battle" value="sea">
+            <label for="country">Country:</label>
+            <select id="country" name="country" required>
+                <!-- Allied nations -->
+                <optgroup label="Allied Powers">
+                    <option value="USA">United States</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="USSR">Soviet Union</option>
+                    <option value="France">France</option>
+                </optgroup>
+                <!-- Axis nations -->
+                <optgroup label="Axis Powers">
+                    <option value="Germany">Germany</option>
+                    <option value="Japan">Japan</option>
+                    <option value="Italy">Italy</option>
+                </optgroup>
+            </select>
+            <button type="submit">Start Game</button>
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleships – Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Battleships</h1>
+    </header>
+    <main>
+        <div class="info">
+            <p><strong>Country:</strong> {{ country }} | <strong>Battle:</strong> Sea</p>
+            {% if message %}<p>{{ message }}</p>{% endif %}
+        </div>
+        <table class="board">
+            <tr>
+                <th></th>
+                {% for c in range(size) %}
+                    <th>{{ c + 1 }}</th>
+                {% endfor %}
+            </tr>
+            {% for r in range(size) %}
+            <tr>
+                <th>{{ r + 1 }}</th>
+                {% for c in range(size) %}
+                    {% set cell = board[r][c] %}
+                    {% set pos = (r, c) %}
+                    {% set cls = '' %}
+                    {% if cell == 'X' %}
+                        {% set cls = cls + 'hit ' %}
+                    {% elif cell == 'O' %}
+                        {% set cls = cls + 'miss ' %}
+                    {% elif show_ships and pos in ships %}
+                        {% set cls = cls + 'ship ' %}
+                    {% endif %}
+                    {% if last_guess and pos == last_guess %}
+                        {% set cls = cls + 'last' %}
+                    {% endif %}
+                    <td class="{{ cls.strip() }}">
+                        {% if cell == 'X' %}
+                            X
+                        {% elif cell == 'O' %}
+                            O
+                        {% elif show_ships and pos in ships %}
+                            S
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="info">
+            <p>Remaining turns: {{ remaining_turns }}</p>
+        </div>
+        {% if not endgame %}
+        <form method="post">
+            <label for="row">Row (1–{{ size }}):</label>
+            <input type="number" id="row" name="row" min="1" max="{{ size }}" required>
+            <label for="col">Column (1–{{ size }}):</label>
+            <input type="number" id="col" name="col" min="1" max="{{ size }}" required>
+            <button type="submit">Fire!</button>
+        </form>
+        {% else %}
+        <div class="info">
+            <p><a href="{{ url_for('index') }}">Play again</a></p>
+        </div>
+        {% endif %}
+    </main>
+</body>
+</html>
