@@ -57,7 +57,12 @@ def initialise_game(size: int, num_ships: int) -> None:
     }
 
 
-def load_game_from_session() -> Tuple[List[List[str]], List[List[int]], int, int]:
+def load_game_from_session() -> Tuple[
+    List[List[str]],
+    List[List[int]],
+    int,
+    int,
+]:
     """Retrieve the game state from the session.
 
     Returns:
@@ -85,17 +90,26 @@ def index():
             size = int(request.form.get('size', 0))
             num_ships = int(request.form.get('ships', 0))
         except ValueError:
-            # If conversion fails, redisplay the form with an error
-            return render_template('index.html', error="Please enter valid numbers.")
+            # If conversion fails, redisplay the form with an error. Break
+            # arguments onto separate lines to satisfy flake8.
+            return render_template(
+                'index.html',
+                error="Please enter valid numbers.",
+            )
         # Validate size
         if size < 4 or size > 10:
-            return render_template('index.html', error="Board size must be between 4 and 10.")
+            return render_template(
+                'index.html',
+                error="Board size must be between 4 and 10.",
+            )
         # Limit ships to roughly one quarter of the board
         max_ships = (size * size) // 4 or 1
         if num_ships < 1 or num_ships > max_ships:
             return render_template(
                 'index.html',
-                error=f"Number of ships must be between 1 and {max_ships}.",
+                error=(
+                    f"Number of ships must be between 1 and {max_ships}."
+                ),
             )
         # Set the battle type to sea unconditionally (land battles removed)
         battle_type = 'sea'
@@ -140,14 +154,19 @@ def game():
             if row < 0 or row >= size or col < 0 or col >= size:
                 message = f"Please choose numbers between 1 and {size}."
             else:
-                hit, already_guessed = update_board(board, (row, col), ship_set)
+                hit, already_guessed = update_board(
+                    board,
+                    (row, col),
+                    ship_set,
+                )
                 # Convert back to list of lists for session storage
                 ships = [list(coord) for coord in ship_set]
                 # Only deduct a turn if the guess wasn't repeated
                 if not already_guessed:
                     remaining_turns -= 1
                     session['game']['remaining_turns'] = remaining_turns
-                    # Record the last valid guess so it can be highlighted on the board
+                    # Record the last valid guess so it can be highlighted
+                    # on the board
                     session['game']['last_guess'] = [row, col]
                 session['game']['board'] = board
                 session['game']['ships'] = ships

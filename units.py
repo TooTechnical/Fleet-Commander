@@ -22,7 +22,17 @@ class Unit:
     attack_range: int
 
     def take_damage(self, damage: int) -> bool:
-        """Reduce health by the given damage and return True if the unit is destroyed."""
+        """
+        Reduce health by the given damage and return ``True`` if the unit is
+        destroyed.
+
+        Args:
+            damage: How many hit points to subtract from the unit.
+
+        Returns:
+            A boolean indicating whether the unit's health has been reduced
+            to zero or below.
+        """
         self.health -= damage
         return self.health <= 0
 
@@ -32,7 +42,13 @@ class Ship(Unit):
     """A generic naval ship."""
     length: int = 1
 
-    def __init__(self, name: str = "Ship", health: int = 1, attack_range: int = 1, length: int = 1) -> None:
+    def __init__(
+        self,
+        name: str = "Ship",
+        health: int = 1,
+        attack_range: int = 1,
+        length: int = 1,
+    ) -> None:
         super().__init__(name, health, attack_range)
         self.length = length
 
@@ -42,7 +58,12 @@ class Submarine(Unit):
     """Represents a submarine with stealth capabilities."""
     submerged: bool = True
 
-    def __init__(self, name: str = "Submarine", health: int = 1, attack_range: int = 1) -> None:
+    def __init__(
+        self,
+        name: str = "Submarine",
+        health: int = 1,
+        attack_range: int = 1,
+    ) -> None:
         super().__init__(name, health, attack_range)
         self.submerged = True
 
@@ -52,7 +73,13 @@ class Tank(Unit):
     """Represents a land tank unit."""
     armour: int = 2
 
-    def __init__(self, name: str = "Tank", health: int = 3, attack_range: int = 1, armour: int = 2) -> None:
+    def __init__(
+        self,
+        name: str = "Tank",
+        health: int = 3,
+        attack_range: int = 1,
+        armour: int = 2,
+    ) -> None:
         super().__init__(name, health, attack_range)
         self.armour = armour
 
@@ -60,12 +87,22 @@ class Tank(Unit):
 @dataclass
 class Infantry(Unit):
     """Represents infantry troops."""
-    def __init__(self, name: str = "Infantry", health: int = 1, attack_range: int = 1) -> None:
+    def __init__(
+        self,
+        name: str = "Infantry",
+        health: int = 1,
+        attack_range: int = 1,
+    ) -> None:
         super().__init__(name, health, attack_range)
 
 
 @dataclass
 class Artillery(Unit):
     """Represents an artillery unit with long range."""
-    def __init__(self, name: str = "Artillery", health: int = 2, attack_range: int = 3) -> None:
+    def __init__(
+        self,
+        name: str = "Artillery",
+        health: int = 2,
+        attack_range: int = 3,
+    ) -> None:
         super().__init__(name, health, attack_range)

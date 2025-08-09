@@ -62,8 +62,11 @@ def place_ships(board_size: int, number_of_ships: int) -> Set[Tuple[int, int]]:
         A set of tuples, each containing a row and column index.
     """
     if number_of_ships > board_size * board_size:
+        # Break the error message across two lines to satisfy the flake8
+        # maximum line length recommendation (79 characters per line).
         raise ValueError(
-            "Number of ships cannot exceed the total number of squares on the board."
+            "Number of ships cannot exceed the total number of squares "
+            "on the board."
         )
     ships: Set[Tuple[int, int]] = set()
     while len(ships) < number_of_ships:
@@ -73,7 +76,11 @@ def place_ships(board_size: int, number_of_ships: int) -> Set[Tuple[int, int]]:
     return ships
 
 
-def display_board(board: List[List[str]], show_ships: bool = False, ships: Set[Tuple[int, int]] | None = None) -> None:
+def display_board(
+    board: List[List[str]],
+    show_ships: bool = False,
+    ships: Set[Tuple[int, int]] | None = None,
+) -> None:
     """Print the current state of the game board to the console.
 
     Optionally reveal the positions of the remaining ships. The board is
@@ -93,8 +100,15 @@ def display_board(board: List[List[str]], show_ships: bool = False, ships: Set[T
     for row_index, row in enumerate(board):
         row_display = f"{row_index + 1:>2}|"
         for col_index, cell in enumerate(row):
-            # Reveal ships if requested and the cell hasn't been guessed
-            if show_ships and ships and (row_index, col_index) in ships and cell == ' ':
+            # Reveal ships if requested and the cell hasn't been guessed.  The
+            # conditional is broken across multiple lines to satisfy flake8's
+            # maximum line length rule.
+            if (
+                show_ships
+                and ships
+                and (row_index, col_index) in ships
+                and cell == ' '
+            ):
                 row_display += " S "
             else:
                 row_display += f" {cell} "
@@ -125,7 +139,11 @@ def get_integer_input(prompt: str, min_value: int, max_value: int) -> int:
             print("Invalid input. Please enter a whole number.")
             continue
         if value < min_value or value > max_value:
-            print(f"Please enter a number between {min_value} and {max_value}.")
+            # Break the f-string onto two lines to satisfy line length limits
+            print(
+                f"Please enter a number between {min_value} "
+                f"and {max_value}."
+            )
             continue
         return value
 
@@ -236,13 +254,21 @@ def game_loop() -> None:
 
     board = create_board(size)
     ships = place_ships(size, num_ships)
-    # Set number of turns. Basic heuristic: twice the number of squares divided by number of ships.
+    # Set number of turns.
+    # Basic heuristic: twice the number of squares divided by number of ships.
     max_turns = max(size * size // num_ships, size)
 
+    # Build a grammatically correct ship description. Breaking comments and
+    # strings across lines ensures we adhere to flake8's maximum line length.
+    ship_word = "ship" if num_ships == 1 else "ships"
     print(
-        f"The computer has hidden {num_ships} ship{'s' if num_ships != 1 else ''} on a {size}×{size} board."
+        f"The computer has hidden {num_ships} {ship_word} on a "
+        f"{size}×{size} board."
     )
-    print(f"You have {max_turns} turns to sink them all. Good luck!\n")
+    # Wrap the message onto two lines to conform to flake8's line length limit.
+    print(
+        f"You have {max_turns} turns to sink them all. Good luck!\n"
+    )
 
     turns_taken = 0
     while turns_taken < max_turns and ships:
